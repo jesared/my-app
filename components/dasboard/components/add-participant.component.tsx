@@ -98,6 +98,8 @@ export const AddParticipantComponent = () => {
       )}
       
       <p className="text-lg font-medium leading-10 text-violet-600">Epreuves</p>
+            {/* Ajout du formulaire épreuves à ajouter */}
+            
             <Button type="submit" variant="default">
               <SmilePlus className="mr-2 w-5 h-5" />
               ajouter-le
