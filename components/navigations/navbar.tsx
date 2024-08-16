@@ -1,7 +1,8 @@
 /* eslint-disable react/no-unescaped-entities */
 "use client"
 
-import * as React from "react"
+import {useEffect, useState} from "react";
+import { getSession, useSession } from "next-auth/react";
 import { usePathname } from 'next/navigation'
 import Link from "next/link"
 
@@ -11,54 +12,85 @@ import {
   NavigationMenuItem,
   NavigationMenuLink,
   NavigationMenuList,
-  navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu"
 
+import { HeartHandshake, HomeIcon, LogIn, Lollipop, UserCog2 } from "lucide-react";
+import Loading from "@/components/loading/loading";
 
 
-export function  Navbar() {
 
-  const pathname = usePathname()
+
+export const Navbar = () => {
+
+  const [loading, setLoading] = useState(true);
+
+  const pathname = usePathname();
+  const { data: session } = useSession();
+  
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const currentSession  = await getSession();
+      if (currentSession) {
+        setLoading(false)
+      }else{
+        setLoading(false)
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  if (loading) {
+    return <Loading />
+  }
+  
 
   return (
-    <NavigationMenu className="w-full mx-auto">
+    <NavigationMenu className="container mx-auto  py-5">
       <NavigationMenuList>
         <NavigationMenuItem>
           <Link href="/" legacyBehavior passHref >
             <NavigationMenuLink
-              className={pathname === "/" ? "font-bold" : navigationMenuTriggerStyle()}
+              className="flex items-center"
             >
-              accueil
+              <HomeIcon className={pathname === "/" ? "mr-2 h-7 w-7 text-primary" : "mr-2 h-7 w-7"} />
+
             </NavigationMenuLink>
           </Link>
         </NavigationMenuItem>
-        <NavigationMenuItem>
-          <Link href="/login" legacyBehavior passHref >
-            <NavigationMenuLink
-              className={pathname === "/login" ? "font-bold" : navigationMenuTriggerStyle()}
-            >
-              se connecter
-            </NavigationMenuLink>
-          </Link>
-        </NavigationMenuItem>
-        <NavigationMenuItem>
-          <Link href="/register" legacyBehavior passHref>
-            <NavigationMenuLink
-              className={pathname === "/register" ? "font-bold" : navigationMenuTriggerStyle()}
-            >
-              s'inscrire
-            </NavigationMenuLink>
-          </Link>
-        </NavigationMenuItem>
-        <NavigationMenuItem>
-          <Link href="/dashboard" legacyBehavior passHref>
-            <NavigationMenuLink
-              className={pathname === "/dashboard" ? "font-bold" : navigationMenuTriggerStyle()}
-            >
-              dashboard
-            </NavigationMenuLink>
-          </Link>
-        </NavigationMenuItem>
+        {!session ? (
+          <>
+            <NavigationMenuItem >
+              <Link href="/login" legacyBehavior passHref >
+                <NavigationMenuLink
+                  className="flex items-center"
+                >
+                <LogIn className={pathname === "/login" ? "mr-2 h-7 w-7 text-primary" : "mr-2 h-7 w-7"} />
+                  
+                </NavigationMenuLink>
+              </Link>
+            </NavigationMenuItem>
+            <NavigationMenuItem >
+              <Link href="/register" legacyBehavior passHref>
+                <NavigationMenuLink
+                  className="flex items-center"
+                >
+                <HeartHandshake  className={pathname === "/register" ? "mr-2 h-7 w-7 text-primary " : "mr-2 h-7 w-7"} />
+                </NavigationMenuLink>
+              </Link>
+            </NavigationMenuItem>
+          </>
+        ) : null}
+        {session ? (
+          <NavigationMenuItem>
+            <Link href="/dashboard" legacyBehavior passHref>
+              <NavigationMenuLink>
+              <Lollipop className={pathname.startsWith("/dashboard") ? "mr-2 h-7 w-7 text-primary " : "mr-2 h-7 w-7"} />
+              </NavigationMenuLink>
+            </Link>
+          </NavigationMenuItem>
+        ) : null}
       </NavigationMenuList>
     </NavigationMenu>
   )

@@ -37,6 +37,7 @@ export function RegisterForm({ title, description, register = false, isLoading }
 
     const handleSubmit = async (e: any) => {
         e.preventDefault();
+        
         if (!email || !password) {
             setError("All fields are necessary.");
             return;

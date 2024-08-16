@@ -1,22 +1,21 @@
 import { RegisterForm  } from "@/components/form/register-form";
-import { getServerSession } from "next-auth";
-import { redirect } from "next/navigation";
-import { authOptions } from "../api/auth/[...nextauth]/route";
+import Loading from "@/components/loading/loading";
+import { Suspense } from "react";
 
 
-export default async function Register() {
-  const session = await getServerSession(authOptions);
+export default function Register() {
 
 
-  if (session) redirect("dashboard");
 
   return (
-    <div className="grid place-items-center h-screen">  
+    <Suspense fallback={<Loading />}>
+    <div className="grid place-items-center pt-10">  
         <RegisterForm
         title="Register"
         description="Incrit toi sur tournoi management !"
         register
         />
     </div>
+    </Suspense>
   )
 }

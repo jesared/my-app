@@ -1,10 +1,8 @@
 // auth-context.tsx
 
-'use client';
+'use client'
 
 import * as React from "react"
-
-
 import { createContext, ReactNode, useContext } from 'react';
 import { Session } from 'next-auth';
 

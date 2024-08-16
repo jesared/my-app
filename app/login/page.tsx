@@ -2,25 +2,22 @@ import { SignInForm } from "@/components/form/signin-form"
 import { redirect } from "next/navigation";
 
 import { getServerSession } from "next-auth";
-import { authOptions } from "../api/auth/[...nextauth]/route";
+import { authOptions } from "@/lib/auth"
 
+import Loading from "@/components/loading/loading";
+import { Suspense } from "react";
 
+export default function Login() {
 
-export default async function Login() {
-
-
-  const session = await getServerSession(authOptions);
-
-  console.log('session', session)
-
-  if (session) redirect('/dashboard');
 
   return (
-    <div className="grid place-items-center h-screen">  
+    <Suspense fallback={<Loading />}>
+      <div className="grid place-items-center pt-10">
         <SignInForm
-         title="SignIn"
-         description="Log toi mon ami !" 
-         />
-    </div>
+          title="SignIn"
+          description="Log toi mon ami !"
+        />
+      </div>
+    </Suspense>
   )
 }

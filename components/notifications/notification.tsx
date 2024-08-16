@@ -1,4 +1,9 @@
 import { BellIcon, EyeNoneIcon, PersonIcon } from "@radix-ui/react-icons"
+import { Session } from 'next-auth';
+
+interface NotificationProps {
+  session: Session | null;
+}
 
 import {
   Card,
@@ -9,8 +14,9 @@ import {
 } from "@/components/ui/card"
 
 export function Notification() {
+
   return (
-    <Card>
+    <Card className="rounded-none bg-violet-50">
       <CardHeader className="pb-3">
         <CardTitle>Notifications</CardTitle>
         <CardDescription>
